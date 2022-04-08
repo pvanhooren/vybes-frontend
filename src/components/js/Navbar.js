@@ -1,12 +1,26 @@
 import React, { useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
-import { Nav, Button } from "react-bootstrap";
+import { Nav, NavDropdown } from "react-bootstrap";
 import logo from "../../images/vybes-logo-white.png";
 import * as Icon from "react-bootstrap-icons";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import "../sass/_navbar.scss";
 
 const NavigationBar = () => {
+  const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  const [show, setShow] = useState(false);
+
+  const toggleDropdown = (e) => {
+    setShow(!show);
+  };
+
+  const logoutWithRedirect = () =>
+    logout({
+      returnTo: window.location.origin,
+    });
+
   return (
     <Navbar collapseOnSelect expand="md" variant="dark" id="navbar">
       <Navbar.Brand href="/">
@@ -23,13 +37,13 @@ const NavigationBar = () => {
 
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav>
-          <a className="nav-item" href="#">
-            <Icon.PersonFill className="nav-item-icon"/>
+          <a className="nav-item" href="People">
+            <Icon.PersonFill className="nav-item-icon" />
             <h4 className="nav-item-text">People</h4>
           </a>
 
-          <a className="nav-item" href="#">
-            <Icon.PeopleFill className="nav-item-icon"/>
+          <a className="nav-item" href="Groups">
+            <Icon.PeopleFill className="nav-item-icon" />
             <h4 className="nav-item-text">Groups</h4>
           </a>
         </Nav>
@@ -39,18 +53,86 @@ const NavigationBar = () => {
         className="justify-content-end"
         id="responsive-navbar-nav"
       >
-        <input
+        <div class="form-group has-search">
+          <span class="form-control-feedback">
+            <Icon.Search></Icon.Search>
+          </span>
+
+          <input
+            type="text"
+            class="form-control rounded search-bar"
+            placeholder="Search for people, groups..."
+          />
+        </div>
+        {/* <input
           type="search"
           className="form-control rounded search-bar"
           placeholder="Search for people, groups..."
           aria-label="Search"
           aria-describedby="search-addon"
-        />
+        /> */}
 
-        <Nav.Link className="nav-item profile-button" href="#">
-          <Icon.PersonCircle color="white" className="nav-item-icon" />
-          <h4 className="nav-item-text">Pim</h4>
-        </Nav.Link>
+        <div className="user-controls">
+          {isAuthenticated ? (
+            <NavDropdown
+              className="user-dropdown"
+              title={
+                <>
+                  <img
+                    src={user.picture}
+                    alt="Profile"
+                    className="nav-user-profile rounded-circle"
+                    width="40"
+                    height="40"
+                  />
+                </>
+              }
+              show={show}
+              onMouseEnter={toggleDropdown}
+              onMouseLeave={toggleDropdown}
+              align="end"
+            >
+              <NavDropdown.Header>{user.name}</NavDropdown.Header>
+              <NavDropdown.Divider className="divider" />
+
+              <div className="dropdown-buttons">
+                <NavDropdown.Item href="/Profile" className="dropdown-button">
+                  <Icon.PersonBadge />
+                  Profile
+                </NavDropdown.Item>
+
+                <NavDropdown.Item
+                  href="/Notifications"
+                  className="dropdown-button"
+                >
+                  <Icon.Bell />
+                  Notifications
+                </NavDropdown.Item>
+              </div>
+
+              <div className="icons">
+                <a
+                  onClick={() => logoutWithRedirect()}
+                  className="logout-button"
+                >
+                  <Icon.BoxArrowInLeft />
+                  Sign out
+                </a>
+
+                <a href="/Settings" className="settings-button">
+                  <Icon.WrenchAdjustable />
+                </a>
+              </div>
+            </NavDropdown>
+          ) : (
+            <Nav.Link
+              className="nav-item login-button"
+              onClick={() => loginWithRedirect()}
+            >
+              <Icon.PersonCircle color="white" className="nav-item-icon login-button-icon" />
+            </Nav.Link>
+          )}
+        </div>
       </Navbar.Collapse>
     </Navbar>
   );

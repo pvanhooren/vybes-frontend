@@ -12,12 +12,9 @@
     text-decoration: inherit;
   }
 
-  .search-bar {
-      margin-right: 24px;
-  }
-
-  .profile-button {
-    padding-right: 0;
+  .has-search {
+    width: 100%;
+    margin-right: 24px;
   }
 
   .nav-item-icon {
@@ -25,15 +22,93 @@
     margin-right: 8px;
   }
 
+  .dropdown-toggle {
+    color: white;
+    padding: 0;
+
+    .nav-user-profile {
+      width: 40px;
+    }
+
+    &:after {
+      vertical-align: unset;
+    }
+  }
+
   .nav-item-text {
-      margin-top: 6px;
+    margin-top: 6px;
+  }
+
+  .user-dropdown {
+    a {
+      margin-left: auto;
+    }
+  }
+
+  .login-button-icon {
+    margin-left: auto;
+  }
+
+  .user-dropdown {
+    .divider {
+      margin-bottom: 0;
+    }
+
+    .dropdown-buttons {
+      margin-bottom: 12px;
+
+      .dropdown-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 8px;
+        border-bottom: 1px solid gray;
+
+        svg {
+          margin-right: 8px;
+        }
+      }
+    }
+
+    .icons {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0 8px;
+
+      a {
+        margin-left: unset;
+        color: inherit;
+        text-decoration: inherit;
+      }
+
+      .logout-button {
+        font-size: 14px;
+
+        &:hover {
+          cursor: pointer;
+        }
+
+        svg {
+          margin-bottom: 4px;
+          margin-right: 4px;
+        }
+      }
+
+      .settings-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 12px;
+      }
+    }
   }
 
   .navbar-toggler {
-      border-color: white;
+    border-color: white;
 
-      .navbar-toggler-icon {
-          color: white;
-      }
+    .navbar-toggler-icon {
+      color: white;
+    }
   }
 }
