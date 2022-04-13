@@ -53,14 +53,14 @@ const NavigationBar = () => {
         className="justify-content-end"
         id="responsive-navbar-nav"
       >
-        <div class="form-group has-search">
-          <span class="form-control-feedback">
+        <div className="form-group has-search">
+          <span className="form-control-feedback">
             <Icon.Search></Icon.Search>
           </span>
 
           <input
             type="text"
-            class="form-control rounded search-bar"
+            className="form-control rounded search-bar"
             placeholder="Search for people, groups..."
           />
         </div>

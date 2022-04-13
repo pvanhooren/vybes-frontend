@@ -14,7 +14,7 @@ import "./index.css";
 
 const domain = process.env.REACT_APP_DOMAIN;
 const clientId = process.env.REACT_APP_CLIENT_ID;
-// const audience = process.env.REACT_APP_AUDIENCE;
+const audience = process.env.REACT_APP_AUDIENCE;
 
 const onRedirectCallback = (appState) => {
   history.push(
@@ -26,6 +26,7 @@ const providerConfig = {
   domain: domain,
   clientId: clientId,
   redirectUri: window.location.origin,
+  audience: audience,
   onRedirectCallback,
 };
 
