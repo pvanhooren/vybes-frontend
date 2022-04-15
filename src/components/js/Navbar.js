@@ -4,6 +4,7 @@ import { Nav, NavDropdown } from "react-bootstrap";
 import logo from "../../images/vybes-logo-white.png";
 import * as Icon from "react-bootstrap-icons";
 import { useAuth0 } from "@auth0/auth0-react";
+import history from "../../utils/history";
 
 import "../sass/_navbar.scss";
 
@@ -16,6 +17,10 @@ const NavigationBar = () => {
     setShow(!show);
   };
 
+  const loginInterceptor = () => {
+    loginWithRedirect();
+  };
+
   const logoutWithRedirect = () =>
     logout({
       returnTo: window.location.origin,
@@ -23,13 +28,17 @@ const NavigationBar = () => {
 
   return (
     <Navbar collapseOnSelect expand="md" variant="dark" id="navbar">
-      <Navbar.Brand href="/">
+      <Navbar.Brand
+        onClick={() => {
+          history.push("/");
+        }}
+      >
         <img
           alt="logo"
           src={logo}
           width="auto"
           height="40"
-          className="align-center"
+          className="navbar-logo align-center"
         />
       </Navbar.Brand>
 
@@ -37,12 +46,22 @@ const NavigationBar = () => {
 
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav>
-          <a className="nav-item" href="People">
+          <a
+            className="nav-item"
+            onClick={() => {
+              history.push("Profile");
+            }}
+          >
             <Icon.PersonFill className="nav-item-icon" />
             <h4 className="nav-item-text">People</h4>
           </a>
 
-          <a className="nav-item" href="Groups">
+          <a
+            className="nav-item"
+            onClick={() => {
+              history.push("Groups");
+            }}
+          >
             <Icon.PeopleFill className="nav-item-icon" />
             <h4 className="nav-item-text">Groups</h4>
           </a>
@@ -96,13 +115,20 @@ const NavigationBar = () => {
               <NavDropdown.Divider className="divider" />
 
               <div className="dropdown-buttons">
-                <NavDropdown.Item href="/Profile" className="dropdown-button">
+                <NavDropdown.Item
+                  onClick={() => {
+                    history.push("Profile");
+                  }}
+                  className="dropdown-button"
+                >
                   <Icon.PersonBadge />
                   Profile
                 </NavDropdown.Item>
 
                 <NavDropdown.Item
-                  href="/Notifications"
+                  onClick={() => {
+                    history.push("Notifications");
+                  }}
                   className="dropdown-button"
                 >
                   <Icon.Bell />
@@ -119,7 +145,12 @@ const NavigationBar = () => {
                   Sign out
                 </a>
 
-                <a href="/Settings" className="settings-button">
+                <a
+                  onClick={() => {
+                    history.push("Settings");
+                  }}
+                  className="settings-button"
+                >
                   <Icon.WrenchAdjustable />
                 </a>
               </div>
@@ -127,9 +158,12 @@ const NavigationBar = () => {
           ) : (
             <Nav.Link
               className="nav-item login-button"
-              onClick={() => loginWithRedirect()}
+              onClick={() => loginInterceptor()}
             >
-              <Icon.PersonCircle color="white" className="nav-item-icon login-button-icon" />
+              <Icon.PersonCircle
+                color="white"
+                className="nav-item-icon login-button-icon"
+              />
             </Nav.Link>
           )}
         </div>
