@@ -16,11 +16,7 @@ const NavigationBar = () => {
   const toggleDropdown = (e) => {
     setShow(!show);
   };
-
-  const loginInterceptor = () => {
-    loginWithRedirect();
-  };
-
+  
   const logoutWithRedirect = () =>
     logout({
       returnTo: window.location.origin,
@@ -158,7 +154,7 @@ const NavigationBar = () => {
           ) : (
             <Nav.Link
               className="nav-item login-button"
-              onClick={() => loginInterceptor()}
+              onClick={() => loginWithRedirect()}
             >
               <Icon.PersonCircle
                 color="white"
