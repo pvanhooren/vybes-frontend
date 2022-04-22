@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import { Nav, NavDropdown } from "react-bootstrap";
-import logo from "../../images/vybes-logo-white.png";
+import { useNavigate } from "react-router";
 import * as Icon from "react-bootstrap-icons";
 import { useAuth0 } from "@auth0/auth0-react";
-import history from "../../utils/history";
 
+import logo from "../../images/vybes-logo-white.png";
 import "../sass/_navbar.scss";
 
 const NavigationBar = () => {
+  const navigate = useNavigate();
+
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
 
   const [show, setShow] = useState(false);
@@ -26,7 +28,7 @@ const NavigationBar = () => {
     <Navbar collapseOnSelect expand="md" variant="dark" id="navbar">
       <Navbar.Brand
         onClick={() => {
-          history.push("/");
+          navigate("/");
         }}
       >
         <img
@@ -45,7 +47,7 @@ const NavigationBar = () => {
           <a
             className="nav-item"
             onClick={() => {
-              history.push("Profile");
+              navigate("people");
             }}
           >
             <Icon.PersonFill className="nav-item-icon" />
@@ -55,7 +57,7 @@ const NavigationBar = () => {
           <a
             className="nav-item"
             onClick={() => {
-              history.push("Groups");
+              navigate("groups");
             }}
           >
             <Icon.PeopleFill className="nav-item-icon" />
@@ -113,7 +115,7 @@ const NavigationBar = () => {
               <div className="dropdown-buttons">
                 <NavDropdown.Item
                   onClick={() => {
-                    history.push("Profile");
+                    navigate("profile");
                   }}
                   className="dropdown-button"
                 >
@@ -123,7 +125,7 @@ const NavigationBar = () => {
 
                 <NavDropdown.Item
                   onClick={() => {
-                    history.push("Notifications");
+                    navigate("Notifications");
                   }}
                   className="dropdown-button"
                 >
@@ -143,7 +145,7 @@ const NavigationBar = () => {
 
                 <a
                   onClick={() => {
-                    history.push("Settings");
+                    navigate("Settings");
                   }}
                   className="settings-button"
                 >

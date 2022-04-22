@@ -1,8 +1,8 @@
 import React from 'react'
 import { Spinner } from 'react-bootstrap';
 
-import "../sass/_loading.scss";
-import logo from '../../images/logo.gif';
+import "../../sass/intervals/_loading.scss";
+import logo from '../../../images/logo.gif';
 
 function Loading() {
   return (

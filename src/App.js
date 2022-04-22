@@ -3,12 +3,18 @@ import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch, useSelector } from "react-redux";
-import { setToken, setProfileId, setUserName, setDisplayName } from "./redux/accountManager";
+import {
+  setToken,
+  setProfileId,
+  setUserName,
+  setDisplayName,
+} from "./redux/accountManager";
 
-import history from "./utils/history";
-import Loading from "./components/js/Loading";
-import Downtime from "./components/js/Downtime";
+// import history from "./utils/history";
+import Loading from "./components/js/intervals/Loading";
+import Downtime from "./components/js/intervals/Downtime";
 import Home from "./components/js/Home";
+import Profile from "./components/js/profile/Profile";
 import Navbar from "./components/js/Navbar.js";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -43,13 +49,16 @@ function App() {
       setDisplayName(user.name);
 
       await axios
-        .get(`https://localhost:7086/profiles/id/${user.sub}`)
+        .get(`https://localhost:7086/profiles/uid/${user.sub}`)
         .then((response) => {
           let displayNameFromResponse = response.data.displayName;
 
-          if(displayNameFromResponse === "" || displayNameFromResponse === null) {
+          if (
+            displayNameFromResponse === "" ||
+            displayNameFromResponse === null
+          ) {
             setDisplayName(response.data.displayName);
-          } 
+          }
 
           setProfileId(response.data.profileId);
           setUserName(response.data.userName);
@@ -144,9 +153,10 @@ function App() {
       <Navbar />
 
       <div className="content">
-        <Routes history={history}>
-          <Route path="/" element={<Home />} />
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
       </div>
 
       <Modal
@@ -174,7 +184,9 @@ function App() {
               required
               isInvalid={registrationError}
               maxLength={15}
-              onChange={(e) => setRegistrationUserNameInterceptor(e.target.value)}
+              onChange={(e) =>
+                setRegistrationUserNameInterceptor(e.target.value)
+              }
             />
 
             <Form.Control.Feedback type="invalid">
@@ -183,7 +195,9 @@ function App() {
           </InputGroup>
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => createProfile(registrationUserName)}>Register</Button>
+          <Button onClick={() => createProfile(registrationUserName)}>
+            Register
+          </Button>
         </Modal.Footer>
       </Modal>
     </div>

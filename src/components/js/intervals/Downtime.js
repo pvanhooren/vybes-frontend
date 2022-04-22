@@ -1,7 +1,7 @@
 import React from 'react'
 
-import "../sass/_downtime.scss";
-import logo from '../../images/logo.gif';
+import "../../sass/intervals/_downtime.scss";
+import logo from '../../../images/logo.gif';
 
 function Loading() {
   return (
