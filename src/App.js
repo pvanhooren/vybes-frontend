@@ -3,14 +3,16 @@ import { Modal, Button, Form, InputGroup } from "react-bootstrap";
 import { Routes, Route } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+
 import {
   setToken,
   setProfileId,
   setUserName,
   setDisplayName,
 } from "./redux/accountManager";
+import http from "./services/serviceVariables";
 
-// import history from "./utils/history";
 import Loading from "./components/js/intervals/Loading";
 import Downtime from "./components/js/intervals/Downtime";
 import Home from "./components/js/Home";
@@ -20,7 +22,6 @@ import Navbar from "./components/js/Navbar.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.scss";
-import axios from "axios";
 
 function App() {
   const dispatch = useDispatch();
@@ -35,8 +36,7 @@ function App() {
   const [registrationError, setRegistrationError] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { isLoading, error, isAuthenticated, getAccessTokenSilently, user } =
-    useAuth0();
+  const { isLoading, error, isAuthenticated, getAccessTokenSilently, user } = useAuth0();
 
   useEffect(() => {
     async function userExists() {
@@ -44,24 +44,26 @@ function App() {
         audience: process.env.REACT_APP_AUDIENCE,
       });
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-      setDisplayName(user.name);
+      await dispatch(setDisplayName(user.name));
 
-      await axios
-        .get(`https://localhost:7086/profiles/uid/${user.sub}`)
+      await http
+        .get(`/profiles/uid/${user.sub}`, { headers: {
+          Authorization: `Bearer ${accessToken}`
+        }})
         .then((response) => {
           let displayNameFromResponse = response.data.displayName;
 
           if (
-            displayNameFromResponse === "" ||
-            displayNameFromResponse === null
+            displayNameFromResponse !== "" &&
+            displayNameFromResponse !== null
           ) {
-            setDisplayName(response.data.displayName);
+            dispatch(setDisplayName(response.data.displayName));
           }
 
-          setProfileId(response.data.profileId);
-          setUserName(response.data.userName);
+          dispatch(setProfileId(response.data.profileId));
+          dispatch(setUserName(response.data.userName));
 
           setRequestLoading(false);
         })
@@ -87,7 +89,7 @@ function App() {
     } else {
       setRequestLoading(false);
     }
-  });
+  }, [ user ]);
 
   async function createProfile(providedUserName) {
     const nospecial = /^(\d|\w)+$/;
@@ -112,11 +114,11 @@ function App() {
         audience: process.env.REACT_APP_AUDIENCE,
       });
 
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+      http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-      await axios
+      await http
         .post(
-          "https://localhost:7086/profiles/new?userId=" +
+          "/profiles/new?userId=" +
             user.sub +
             "&userName=" +
             providedUserName

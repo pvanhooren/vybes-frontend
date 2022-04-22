@@ -4,6 +4,7 @@ import { Nav, NavDropdown } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import * as Icon from "react-bootstrap-icons";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useSelector } from "react-redux";
 
 import logo from "../../images/vybes-logo-white.png";
 import "../sass/_navbar.scss";
@@ -12,6 +13,8 @@ const NavigationBar = () => {
   const navigate = useNavigate();
 
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+
+  const { displayName } = useSelector((state) => state.accountManager);
 
   const [show, setShow] = useState(false);
 
@@ -109,7 +112,7 @@ const NavigationBar = () => {
               onMouseLeave={toggleDropdown}
               align="end"
             >
-              <NavDropdown.Header>{user.name}</NavDropdown.Header>
+              <NavDropdown.Header>{displayName}</NavDropdown.Header>
               <NavDropdown.Divider className="divider" />
 
               <div className="dropdown-buttons">
