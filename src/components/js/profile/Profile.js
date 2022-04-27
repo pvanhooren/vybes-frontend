@@ -9,14 +9,16 @@ import * as Icon from "react-bootstrap-icons";
 import "../../sass/profile/_profile.scss";
 
 const Profile = () => {
-  const { profileId, userName, displayName, token } = useSelector(
+  const { displayName, token, profileObject } = useSelector(
     (state) => state.accountManager
   );
+
+  const [modifiedProfileObject, setModifiedProfileObject] = useState(profileObject);
 
   const { user } = useAuth0();
 
   useEffect(() => {
-    console.log(user);
+    console.log(modifiedProfileObject);
   }, [user]);
 
   return (
@@ -30,7 +32,7 @@ const Profile = () => {
 
             <h5 className="display-name">{displayName}</h5>
 
-            <p> @{userName} </p>
+            <p> @{modifiedProfileObject['userName']} </p>
 
             <div className="profile-buttons">
               <div className="profile-button">Edit appearance</div>

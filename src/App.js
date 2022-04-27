@@ -7,9 +7,8 @@ import axios from "axios";
 
 import {
   setToken,
-  setProfileId,
-  setUserName,
   setDisplayName,
+  setProfileObject,
 } from "./redux/accountManager";
 import http from "./services/serviceVariables";
 
@@ -25,7 +24,7 @@ import "./App.scss";
 
 function App() {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.accountManager);
+  const { token, profileObject } = useSelector((state) => state.accountManager);
 
   const [requestLoading, setRequestLoading] = useState(true);
   const [downtime, setDowntime] = useState(false);
@@ -62,8 +61,7 @@ function App() {
             dispatch(setDisplayName(response.data.displayName));
           }
 
-          dispatch(setProfileId(response.data.profileId));
-          dispatch(setUserName(response.data.userName));
+          dispatch(setProfileObject(response.data));
 
           setRequestLoading(false);
         })
@@ -84,7 +82,7 @@ function App() {
       await dispatch(setToken(accessToken));
     }
 
-    if (token === null && isAuthenticated) {
+    if ((token === null || profileObject === null) && isAuthenticated) {
       userExists();
     } else {
       setRequestLoading(false);
