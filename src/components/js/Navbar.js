@@ -21,7 +21,7 @@ const NavigationBar = () => {
   const toggleDropdown = (e) => {
     setShow(!show);
   };
-  
+
   const logoutWithRedirect = () =>
     logout({
       returnTo: window.location.origin,
@@ -46,33 +46,38 @@ const NavigationBar = () => {
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav>
-          <a
-            className="nav-item"
-            onClick={() => {
-              navigate("people");
-            }}
-          >
-            <Icon.PersonFill className="nav-item-icon" />
-            <h4 className="nav-item-text">People</h4>
-          </a>
+        {isAuthenticated ? (
+          <Nav>
+            <a
+              className="nav-item"
+              onClick={() => {
+                navigate("people");
+              }}
+            >
+              <Icon.PersonFill className="nav-item-icon" />
+              <h4 className="nav-item-text">People</h4>
+            </a>
 
-          <a
-            className="nav-item"
-            onClick={() => {
-              navigate("groups");
-            }}
-          >
-            <Icon.PeopleFill className="nav-item-icon" />
-            <h4 className="nav-item-text">Groups</h4>
-          </a>
-        </Nav>
+            <a
+              className="nav-item"
+              onClick={() => {
+                navigate("groups");
+              }}
+            >
+              <Icon.PeopleFill className="nav-item-icon" />
+              <h4 className="nav-item-text">Groups</h4>
+            </a>
+          </Nav>
+        ) : (
+          <></>
+        )}
       </Navbar.Collapse>
 
       <Navbar.Collapse
         className="justify-content-end"
         id="responsive-navbar-nav"
       >
+        {isAuthenticated ? (
         <div className="form-group has-search">
           <span className="form-control-feedback">
             <Icon.Search></Icon.Search>
@@ -84,6 +89,10 @@ const NavigationBar = () => {
             placeholder="Search for people, groups..."
           />
         </div>
+        ) : (
+          <></>
+        )}
+        
         {/* <input
           type="search"
           className="form-control rounded search-bar"

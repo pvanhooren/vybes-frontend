@@ -12,82 +12,103 @@ import {
 } from "./redux/accountManager";
 import http from "./services/serviceVariables";
 
+import NotFound from "./components/js/intervals/NotFound";
 import Loading from "./components/js/intervals/Loading";
 import Downtime from "./components/js/intervals/Downtime";
 import Home from "./components/js/Home";
 import Profile from "./components/js/profile/Profile";
-import Navbar from "./components/js/Navbar.js";
+import Landing from "./components/js/Landing";
+import Navbar from "./components/js/Navbar";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.scss";
+import useAccount from "./hooks/useAccount";
 
 function App() {
-  const dispatch = useDispatch();
-  const { token, profileObject } = useSelector((state) => state.accountManager);
+  // const dispatch = useDispatch();
+  // const { token, profileObject } = useSelector((state) => state.accountManager);
 
-  const [requestLoading, setRequestLoading] = useState(true);
-  const [downtime, setDowntime] = useState(false);
-  const [registering, setRegistering] = useState(false);
+  // const [requestLoading, setRequestLoading] = useState(true);
+  // const [downtime, setDowntime] = useState(false);
 
-  const [registrationUserName, setRegistrationUserName] = useState("");
+  // const [registrationError, setRegistrationError] = useState(false);
+  // const [message, setMessage] = useState("");
+
+  const { downtime, register, message, requestLoading } = useAccount();
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [registering, setRegistering] = useState(register);
 
   const [registrationError, setRegistrationError] = useState(false);
-  const [message, setMessage] = useState("");
+  
+  const [registrationUserName, setRegistrationUserName] = useState("");
 
-  const { isLoading, error, isAuthenticated, getAccessTokenSilently, user } = useAuth0();
+  const { isLoading, error, isAuthenticated, getAccessTokenSilently, user } =
+    useAuth0();
 
   useEffect(() => {
-    async function userExists() {
-      const accessToken = await getAccessTokenSilently({
-        audience: process.env.REACT_APP_AUDIENCE,
-      });
-
-      // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-
-      await dispatch(setDisplayName(user.name));
-
-      await http
-        .get(`/profiles/uid/${user.sub}`, { headers: {
-          Authorization: `Bearer ${accessToken}`
-        }})
-        .then((response) => {
-          let displayNameFromResponse = response.data.displayName;
-
-          if (
-            displayNameFromResponse !== "" &&
-            displayNameFromResponse !== null
-          ) {
-            dispatch(setDisplayName(response.data.displayName));
-          }
-
-          dispatch(setProfileObject(response.data));
-
-          setRequestLoading(false);
-        })
-        .catch((e) => {
-          if (e.response) {
-            if (e.response.status === 404) {
-              setRegistering(true);
-              setRequestLoading(false);
-            } else {
-              setRequestLoading(false);
-            }
-          } else {
-            setDowntime(true);
-            setRequestLoading(false);
-          }
-        });
-
-      await dispatch(setToken(accessToken));
+    console.log(register);
+    if(message !== null) {
+      setErrorMessage(message);
     }
 
-    if ((token === null || profileObject === null) && isAuthenticated) {
-      userExists();
-    } else {
-      setRequestLoading(false);
+    if(register !== null) {
+      console.log("Aan het aanpassen =D")
+      setRegistering(register);
     }
-  }, [ user ]);
+    // async function userExists() {
+    //   const accessToken = await getAccessTokenSilently({
+    //     audience: process.env.REACT_APP_AUDIENCE,
+    //   });
+
+    //   // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+    //   await dispatch(setDisplayName(user.name));
+
+    //   await http
+    //     .get(`/profiles/uid/${user.sub}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${accessToken}`,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       let displayNameFromResponse = response.data.displayName;
+
+    //       if (
+    //         displayNameFromResponse !== "" &&
+    //         displayNameFromResponse !== null
+    //       ) {
+    //         dispatch(setDisplayName(response.data.displayName));
+    //       }
+
+    //       dispatch(setProfileObject(response.data));
+
+    //       setRequestLoading(false);
+    //     })
+    //     .catch((e) => {
+    //       if (e.response) {
+    //         if (e.response.status === 404) {
+    //           setRegistering(true);
+    //           setRequestLoading(false);
+    //         } else {
+    //           setRequestLoading(false);
+    //         }
+    //       } else {
+    //         setDowntime(true);
+    //         setRequestLoading(false);
+    //       }
+    //     });
+
+    //   await dispatch(setToken(accessToken));
+    // }
+
+    // if ((token === null || profileObject === null) && isAuthenticated) {
+    //   userExists();
+    // } else {
+    //   setRequestLoading(false);
+    // }
+  }, [register]);
 
   async function createProfile(providedUserName) {
     const nospecial = /^(\d|\w)+$/;
@@ -96,15 +117,15 @@ function App() {
 
     if (providedUserName.length == 0) {
       setRegistrationError(true);
-      setMessage("Please choose a username before registering.");
+      setErrorMessage("Please choose a username before registering.");
     } else if (providedUserName.length > 15) {
       setRegistrationError(true);
-      setMessage(
+      setErrorMessage(
         "The username can be 15 characters max. Please remove some characters"
       );
     } else if (!result) {
       setRegistrationError(true);
-      setMessage(
+      setErrorMessage(
         "This username contains special characters. Please remove them"
       );
     } else {
@@ -116,10 +137,7 @@ function App() {
 
       await http
         .post(
-          "/profiles/new?userId=" +
-            user.sub +
-            "&userName=" +
-            providedUserName
+          "/profiles/new?userId=" + user.sub + "&userName=" + providedUserName + "&displayName=" + user.name
         )
         .then((response) => {
           setRegistering(false);
@@ -128,7 +146,7 @@ function App() {
           console.log(e);
 
           setRegistrationError(true);
-          setMessage(
+          setErrorMessage(
             "This username seems to be in use already. Please choose another one!"
           );
         });
@@ -153,10 +171,16 @@ function App() {
       <Navbar />
 
       <div className="content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-          </Routes>
+        <Routes>
+          {isAuthenticated ? (
+            <>
+              <Route exact path="/" element={<Home />} />
+              <Route exact path="/profile" element={<Profile />} />
+            </>
+          ) : (
+            <Route path="*" element={<Landing />} />
+          )}
+        </Routes>
       </div>
 
       <Modal
@@ -190,7 +214,7 @@ function App() {
             />
 
             <Form.Control.Feedback type="invalid">
-              {message}
+              {errorMessage}
             </Form.Control.Feedback>
           </InputGroup>
         </Modal.Body>
