@@ -14,6 +14,7 @@ test("renders learn react link", () => {
       </Provider>
     </BrowserRouter>
   );
-  const linkElement = screen.getByText("People");
+
+  const linkElement = screen.getByAltText("logo");
   expect(linkElement).toBeInTheDocument();
 });
