@@ -10,7 +10,7 @@ import axios from "axios";
 
 import * as Icon from "react-bootstrap-icons";
 import "../../sass/profile/_profile.scss";
-import { setDisplayName } from "../../../redux/accountManager";
+import { setDisplayName, setProfileObject } from "../../../redux/accountManager";
 
 const Profile = () => {
   const account = useAccount();
@@ -52,6 +52,8 @@ const Profile = () => {
       })
       .then((response) => {
         setEditing(false);
+        dispatch(setDisplayName(modifiedProfileObject.displayName))
+        dispatch(setProfileObject(modifiedProfileObject));
       })
       .catch((e) => {
         console.log(e)

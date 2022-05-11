@@ -69,7 +69,7 @@ const useAccount = () => {
     }
 
     if ((token === null || profileObject === null) && isAuthenticated) {
-      console.log("Ik ga vuile dingen doen uwu uwu");
+      console.log("Ik ga dingen doen");
       userExists();
     } else {
       console.log("Ik skip lekker een heel stuk want waarom niet hè");

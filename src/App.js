@@ -135,9 +135,15 @@ function App() {
 
       http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
+      var profileObject = {
+        userId: user.sub,
+        userName: providedUserName,
+        displayName: user.name
+      }
+
       await http
         .post(
-          "/profiles/new?userId=" + user.sub + "&userName=" + providedUserName + "&displayName=" + user.name
+          '/profiles/new', profileObject
         )
         .then((response) => {
           setRegistering(false);
