@@ -17,6 +17,7 @@ import Loading from "./components/js/intervals/Loading";
 import Downtime from "./components/js/intervals/Downtime";
 import Home from "./components/js/Home";
 import Profile from "./components/js/profile/Profile";
+import Settings from "./components/js/Settings";
 import Landing from "./components/js/Landing";
 import Navbar from "./components/js/Navbar";
 
@@ -182,6 +183,7 @@ function App() {
             <>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/profile" element={<Profile />} />
+              <Route exact path="/settings" element={<Settings />} />
             </>
           ) : (
             <Route path="*" element={<Landing />} />

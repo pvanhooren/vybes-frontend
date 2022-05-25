@@ -17,7 +17,7 @@ const Profile = () => {
 
   const dispatch = useDispatch();
 
-  const { displayName, profileObject } = useSelector(
+  const { displayName, profileObject, token } = useSelector(
     (state) => state.accountManager
   );
 
@@ -39,16 +39,16 @@ const Profile = () => {
   function handleChangePhoneNumber() {}
 
   async function updateProfile() {
-    console.log(modifiedProfileObject);
+    // console.log(modifiedProfileObject);
 
-    const accessToken = await getAccessTokenSilently({
-      audience: process.env.REACT_APP_AUDIENCE,
-    });
+    // const accessToken = await getAccessTokenSilently({
+    //   audience: process.env.REACT_APP_AUDIENCE,
+    // });
 
     // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
     await axios.put("https://localhost:7086/profiles/update", modifiedProfileObject, {
-        headers: { Authorization: `Bearer ${accessToken}`},
+        headers: { Authorization: `Bearer ${token}`},
       })
       .then((response) => {
         setEditing(false);
