@@ -17,7 +17,7 @@ const Settings = () => {
   const { logout } = useAuth0();
 
   async function deleteProfile() {
-    await axios.delete("https://localhost:7086/profiles/delete", {
+    await axios.delete(`${process.env.REACT_APP_GATEWAY_URL}/profiles/delete`, {
         headers: { Authorization: `Bearer ${token}`},
         data : profileObject
       })

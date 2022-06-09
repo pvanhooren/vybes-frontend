@@ -47,7 +47,7 @@ const Profile = () => {
 
     // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-    await axios.put("https://localhost:7086/profiles/update", modifiedProfileObject, {
+    await axios.put(`${process.env.REACT_APP_GATEWAY_URL}/profiles/update`, modifiedProfileObject, {
         headers: { Authorization: `Bearer ${token}`},
       })
       .then((response) => {

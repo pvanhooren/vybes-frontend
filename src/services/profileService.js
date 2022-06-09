@@ -13,7 +13,7 @@ class profileService {
 
   baseUri = "/profiles/";
 
-  getById = (profileId) => http.get(this.baseUri + `id/${profileId}`)
+  getById = (profileId) => http.get(this.baseUri + `/id/${profileId}`)
 }
 
 export default profileService;

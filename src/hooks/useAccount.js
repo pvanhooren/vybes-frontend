@@ -37,6 +37,7 @@ const useAccount = () => {
           },
         })
         .then((response) => {
+          console.log(response);
           let displayNameFromResponse = response.data.displayName;
 
           if (
@@ -51,6 +52,7 @@ const useAccount = () => {
           setRequestLoading(false);
         })
         .catch((e) => {
+          console.log(e);
           if (e.response) {
             if (e.response.status === 404) {
                 console.log("register gaat naar TRUE!")
