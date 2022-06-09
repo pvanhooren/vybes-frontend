@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useAuth0 } from "@auth0/auth0-react";
 
-import { Modal, Button, Form, InputGroup } from "react-bootstrap";
+import { Modal, ToastContainer, Toast, Button, Form, InputGroup } from "react-bootstrap";
 
 import _profileService from "../../../services/profileService";
 import useAccount from "../../../hooks/useAccount";
@@ -10,7 +10,10 @@ import axios from "axios";
 
 import * as Icon from "react-bootstrap-icons";
 import "../../sass/profile/_profile.scss";
-import { setDisplayName, setProfileObject } from "../../../redux/accountManager";
+import {
+  setDisplayName,
+  setProfileObject,
+} from "../../../redux/accountManager";
 
 const Profile = () => {
   const account = useAccount();
@@ -24,6 +27,16 @@ const Profile = () => {
   const [modifiedProfileObject, setModifiedProfileObject] = useState({});
 
   const [editing, setEditing] = useState(false);
+
+  const [toastIcon, setToastIcon] = useState(<></>);
+
+  const [toastHeader, setToastHeader] = useState("");
+
+  const [toastMessage, setToastMessage] = useState("");
+
+  const [toastVariant, setToastVariant] = useState("Light");
+
+  const [showToast, setShowToast] = useState(false);
 
   const { user, getAccessTokenSilently } = useAuth0();
 
@@ -47,18 +60,44 @@ const Profile = () => {
 
     // http.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
-    await axios.put(`${process.env.REACT_APP_GATEWAY_URL}/profiles/update`, modifiedProfileObject, {
-        headers: { Authorization: `Bearer ${token}`},
-      })
+    await axios
+      .put(
+        `${process.env.REACT_APP_GATEWAY_URL}/profiles/update`,
+        modifiedProfileObject,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((response) => {
         setEditing(false);
-        dispatch(setDisplayName(modifiedProfileObject.displayName))
+        dispatch(setDisplayName(modifiedProfileObject.displayName));
         dispatch(setProfileObject(modifiedProfileObject));
+
+        setToastIcon(<Icon.Check size={28}/>);
+        setToastHeader("Success!");
+        setToastMessage("Username has successfully been changed.");
+        setToastVariant("Success");
+        setShowToast(true);
       })
       .catch((e) => {
-        console.log(e)
-        // console.log(e);
+        setEditing(false);
+
+        setToastIcon(<Icon.X size={28}/>);
+        setToastHeader("Oops...");
+        setToastMessage(
+          "Username could not be changed. Please try again later!"
+        );
+        setToastVariant("Danger");
+        setShowToast(true);
       });
+  }
+
+  function notImplemented() {
+        setToastIcon(<Icon.ExclamationTriangle size={20}/>);
+        setToastHeader("Not implemented");
+        setToastMessage("This feature has sadly not been implemented");
+        setToastVariant("Warning");
+        setShowToast(true);
   }
 
   useEffect(() => {
@@ -87,9 +126,9 @@ const Profile = () => {
                 Edit appearance
               </div>
 
-              <div className="profile-button">Manage tiles</div>
+              <div className="profile-button" onClick={() => notImplemented()}>Manage tiles</div>
 
-              <div className="profile-button">Add new tile</div>
+              <div className="profile-button" onClick={() => notImplemented()}>Add new tile</div>
             </div>
           </div>
         </div>
@@ -108,21 +147,25 @@ const Profile = () => {
           <div className="card friends-card">
             <div className="card-header">Friends</div>
 
-            <div className="friends-grid"></div>
+            <div className="card-content">Not implemented</div>
           </div>
         </div>
       </div>
 
       <div className="row bottom-row">
         <div className="col-md-7 mb-4 mb-md-0">
-          <div className="card krabbel-card">
+          <div className="card krabbels-card">
             <div className="card-header">Krabbels</div>
+
+            <div className="card-content">Not implemented</div>
           </div>
         </div>
 
         <div className="col-md-5">
           <div className="card groups-card">
             <div className="card-header">Groups</div>
+
+            <div className="card-content">Not implemented</div>
           </div>
         </div>
       </div>
@@ -166,6 +209,16 @@ const Profile = () => {
           <Button onClick={() => updateProfile()}>Save</Button>
         </Modal.Footer>
       </Modal>
+
+      <ToastContainer className="p-3" position="bottom-end">
+        <Toast onClose={() => setShowToast(false)} show={showToast} autohide={true} bg={toastVariant.toLowerCase()}>
+          <Toast.Header closeButton={false}>
+            {toastIcon}
+            <strong className="me-auto">{toastHeader}</strong>
+          </Toast.Header>
+          <Toast.Body variant={toastVariant}>{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
     </div>
   );
 };

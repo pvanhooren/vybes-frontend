@@ -1,5 +1,15 @@
 #home {
+    overflow-x: hidden;
+
     .page-heading {
         margin-bottom: 16px;
+    }
+
+    .card-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: lightgray;
+        min-height: 72vh;
     }
 }

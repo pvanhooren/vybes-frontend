@@ -48,10 +48,38 @@
                     }
                 }
             }
+
+            &.about-card {
+                .card-content {
+                    padding: 8px 16px;
+                }
+            }
         }
     }
 
     .bottom-row {
+        .card {
+            height: 240px;
+        }
+    }
 
+    .card {
+        &.friends-card,
+            &.krabbels-card,
+            &.groups-card {
+                .card-content {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    background-color: lightgray;
+                    height: 100%;
+                }
+            }
+    }
+
+    .toast-container {
+        svg {
+            margin-right: 8px;
+        }
     }
 }

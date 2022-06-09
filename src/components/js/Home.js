@@ -16,6 +16,10 @@ const Home = () => {
             <div className="card-header">
               People you may know
             </div>
+
+            <div className="card-content">
+              Not implemented
+            </div>
           </div>
         </div>
 
@@ -23,6 +27,10 @@ const Home = () => {
           <div className="card groups-card">
             <div className="card-header">
               Groups you may vybe with
+            </div>
+
+            <div className="card-content">
+              Not implemented
             </div>
           </div>
         </div>
