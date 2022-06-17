@@ -16,6 +16,6 @@ module.exports = defineConfig({
   env: {
     username: 'cypress@test.com',
     password: 'Cypress123!',
-    url: url,
+    url: process.env.REACT_APP_URL,
   }
 });

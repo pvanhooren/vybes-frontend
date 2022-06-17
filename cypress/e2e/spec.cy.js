@@ -48,4 +48,8 @@ describe('Authenticated tests', () => {
       cy.get('.navbar-logo').click({force: true});
       cy.get('h1').contains('e2e')
   })
+
+  it('Load landing page', () => {
+    cy.get('h1').contains('Welcome')
+  })
 })
