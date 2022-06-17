@@ -1,6 +1,6 @@
 const { defineConfig } = require("cypress");
 
-var url = 'http://localhost:3000'
+var url = 'http://vybes-frontend'
 
 if(process.env.REACT_APP_URL) {
   url = process.env.REACT_APP_URL
