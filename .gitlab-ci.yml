@@ -1,15 +1,8 @@
 image: node:latest
 
 stages:          # List of stages for jobs, and their order of execution
-  - build
   - e2e-test
   - deploy
-
-build-job:       # This job runs in the build stage, which runs first.
-  stage: build
-  script:
-    - npm install
-    - CI=false npm run build
 
 e2e-test-job:   # This job runs in the test stage.
   image: cypress/browsers:node12.14.1-chrome85-ff81
