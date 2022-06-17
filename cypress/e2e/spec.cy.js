@@ -42,7 +42,7 @@ describe('Authenticated tests', () => {
       cy.get('.dropdown-button:first-child').click({force: true});
 
       cy.get('.profile-button:first-child').click({force: true});
-      cy.get('input.form-control:first-child').clear().type('Cypress e2e testing acc')
+      cy.get('input.form-control:first-child').clear({force: true}).type('Cypress e2e testing acc')
       cy.get('.btn-primary').click({force: true})
 
       cy.get('.navbar-logo').click({force: true});
