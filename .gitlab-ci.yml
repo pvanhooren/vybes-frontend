@@ -20,7 +20,7 @@ e2e-test-job:   # This job runs in the test stage.
     # start the server in the background
     - npm start &
     # run Cypress tests
-    - npx cypress run --browser chrome
+    - npx cypress run --headless --browser chrome
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
