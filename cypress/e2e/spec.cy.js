@@ -50,6 +50,7 @@ describe('Authenticated tests', () => {
   })
 
   it('Load landing page', () => {
+    cy.visit(Cypress.env("url"))
     cy.get('h1').contains('Welcome')
   })
 })
