@@ -2,7 +2,7 @@ image: node:latest
 
 stages:          # List of stages for jobs, and their order of execution
   - build
-  - test
+  - e2e-test
   - deploy
 
 build-job:       # This job runs in the build stage, which runs first.
@@ -11,14 +11,28 @@ build-job:       # This job runs in the build stage, which runs first.
     - npm install
     - CI=false npm run build
 
-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+e2e-test-job:   # This job runs in the test stage.
+  image: cypress/browsers:node12.14.1-chrome85-ff81
+  stage: e2e-test
   script:
-    - npm install --ignore-scripts
-    - npm run test
+    # install dependencies
+    - npm ci
+    # start the server in the background
+    - npm start &
+    # run Cypress tests
+    - npx cypress run --browser chrome
 
 deploy-job:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  image: gitlab/dind
+  services:
+    - docker:dind
+  variables:
+        DOCKER_HOST: tcp://docker:2375
+        DOCKER_TLS_CERTDIR: ""
+        DOCKER_DRIVER: overlay2
   script:
-    - echo "This is a placeholder for the deployment script, nothing is being deployed as of yet."
+    - "docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD"
+    - "docker build -t pimvanhooren/vybes-frontend --no-cache ."
+    - "docker push pimvanhooren/vybes-frontend"
 
