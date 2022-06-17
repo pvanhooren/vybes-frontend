@@ -21,13 +21,11 @@ describe('Authenticated tests', () => {
         cy.get("#password").type(Cypress.env("password"));
         cy.get(".cf3cf4903 > .ce746f871").click({force: true});
       });
-
-      cy.contains('downtime');
       
-      // cy.get('.dropdown-toggle').click({force: true});
-      // cy.get('.dropdown-button:first-child').click({force: true});
+      cy.get('.dropdown-toggle').click({force: true});
+      cy.get('.dropdown-button:first-child').click({force: true});
 
-      // cy.get('h5').contains('Cypress');
+      cy.get('h5').contains('Cypress');
   })
 
   it('Change display name', () => {
